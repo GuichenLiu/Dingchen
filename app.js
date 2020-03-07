@@ -1,6 +1,17 @@
 var express = require('express');
+var indexController = require('./controllers/indexController');
+var bookController = require('./controllers/bookController');
+var mongoose = require('mongoose')
 
 var app = express();
+
+indexController(app);
+bookController(app);
+mongoose.connect(
+    "mongodb+srv://admin:admin@dingchencluster-ojqug.mongodb.net/test?retryWrites=true&w=majority", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
 
 // app.use(expressLayouts);
 app.set('view engine', 'ejs');
@@ -26,6 +37,6 @@ app.use(function(req, res, next) {
 });
 
 
-app.listen(8888);
+app.listen(9999);
 
-console.log('Server running at http://localhost:8888');
+console.log('Server running at http://localhost:9999');
