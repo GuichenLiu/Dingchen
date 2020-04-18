@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顶辰 - 上传</title>
+
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+</head>
+
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <%- include ('./partials/sidebar')%>
+
+                <%- include ('./partials/topbar')%>
+        </div>
+    </div>
+
+    <main class="lingke-layout-content">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+                <%- include ('./partials/messages')%>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="col-lg-12">
+                                <h3 style="float: left;">上传Excel并生成word:</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="/upload" method="post" enctype='multipart/form-data'>
+                                <input type="file" accept=".xls, .xlsx" name="report">
+                                <button type="submit">上传</button>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/main.min.js "></script>
+    <script src="js/perfect-scrollbar.min.js "></script>
+    <script>
+        // initialize with defaults
+        $("#input-id").fileinput();
+
+        // with plugin options
+        $("#input-id").fileinput({
+            'showUpload': false,
+            'previewFileType': 'any'
+        });
+    </script>
+</body>
+
+</html>

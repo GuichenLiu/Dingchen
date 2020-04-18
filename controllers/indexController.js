@@ -7,4 +7,7 @@ module.exports = function(app) {
         res.render('index', { title: "后台管理" });
     });
 
+    app.get('/success', function(req, res) {
+        res.render('success', { title: "成功" });
+    });
 }

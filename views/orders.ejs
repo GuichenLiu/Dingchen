@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顶辰 - 订单</title>
+
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+
+</head>
+
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <%- include ('./partials/sidebar')%>
+
+                <%- include ('./partials/topbar')%>
+        </div>
+    </div>
+
+    <main class="lingke-layout-content">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-lg-12">
+                            <h3 style="float: left;">订单信息</h3>
+                            <!-- <button class="btn btn-primary btn-lg" style="float: right;">批量导入</button>  -->
+                            <button class="btn btn-primary btn-lg" style="float: right" data-toggle="modal" data-target="#myModal">新建</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive col-md-12 col-lg-12 mx-auto text-center">
+                <table class="table table-hover">
+                    <tr>
+                        <th style="text-align:center">订单ID</th>
+                        <th style="text-align:center">书名和数量</th>
+                        <th style="text-align:center">操作</th>
+                    </tr>
+                    <%for (var i = 0 ; i < 10; i ++) {%>
+                        <tr>
+                            <td>
+                                <%- orders[i].订单Id%>
+                            </td>
+                            <td>
+                                <%- orders[i].订单货品和数量%>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#viewModal" data-orderid="<%- orders[i].订单Id%>" data-orderno="<%- orders[i].订单编号%>" data-item="<%-orders[i].订单货品和数量%>" data-paytime="<%-orders[i].支付时间%>" data-receiver="<%-orders[i].收货人%>"
+                                    data-address="<%-orders[i].收货人地址%>" data-phone="<%-orders[i].收货人电话%>" data-trackingno="<%- orders[i].快递单号%>">查看</button>
+                                <button class="btn btn-warning">修改</button>
+                                <button class="btn btn-danger">删除</button>
+                            </td>
+                        </tr>
+                        <%}%>
+                </table>
+            </div>
+
+            <!-- view Modal -->
+            <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel1">查看订单详情</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name" class="col-form-label" style="font-weight: bolder;">书名:</label>
+                                <p id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="orderId" class="col-form-label" style="font-weight: bolder;">订单ID:</label>
+                                <p id="orderId">
+                            </div>
+                            <div class="form-group">
+                                <label for="orderNo" class="col-form-label" style="font-weight: bolder;">订单编号:</label>
+                                <p id="orderNo">
+                            </div>
+                            <div class="form-group">
+                                <label for="trackingNo" class="col-form-label" style="font-weight: bolder;">快递单号:</label>
+                                <p id="trackingNo">
+                            </div>
+                            <div class="form-group">
+                                <label for="information" class="col-form-label" style="font-weight: bolder;">收货信息:</label>
+                                <p id="information">
+                            </div>
+                            <div class="form-group">
+                                <label for="paytime" class="col-form-label" style="font-weight: bolder;">订单日期:</label>
+                                <p id="paytime">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- create Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel2">新建订单</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/orders" method="POST">
+                                <div class="form-group">
+                                    <label for="orderId" class="col-form-label" style="font-weight: bolder;">订单ID:</label>
+                                    <input type="text" name="orderId" class="form-control" placeholder="订单ID" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orderNo" class="col-form-label" style="font-weight: bolder;">订单编号:</label>
+                                    <input type="text" name="orderNo" class="form-control" placeholder="订单编号" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-form-label" style="font-weight: bolder;">订单货品和数量:</label>
+                                    <input type="text" name="name" class="form-control" placeholder="订单货品和数量" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payTime" class="col-form-label" style="font-weight: bolder;">支付时间:</label>
+                                    <input type="text" name="payTime" class="form-control" placeholder="支付时间" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="receiver" class="col-form-label" style="font-weight: bolder;">收货人:</label>
+                                    <input type="text" name="receiver" class="form-control" placeholder="收货人" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address" class="col-form-label" style="font-weight: bolder;">收货人地址:</label>
+                                    <input type="text" name="address" class="form-control" placeholder="收货人地址" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phoneNum" class="col-form-label" style="font-weight: bolder;">收货人电话:</label>
+                                    <input type="text" name="phoneNum" class="form-control" placeholder="收货人电话" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price" class="col-form-label" style="font-weight: bolder;">订单金额:</label>
+                                    <input type="number" name="price" class="form-control" placeholder="订单金额" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="trackingNo" class="col-form-label" style="font-weight: bolder;">快递单号:</label>
+                                    <div class="input-group" id="tNoGroup">
+                                        <input type="text" name="trackingNo" class="form-control" placeholder="快递单号">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-info" type="button" title="remove" id="removeButton">-</button>
+                                        </span>
+                                    </div>
+                                    <button class="btn btn-info btn-sm" type="button" title="add" id="addButton">+</button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="statu" class="col-form-label" style="font-weight: bolder;">状态:</label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="statu" checked="true" value="未发货">未发货
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="statu" value="已发货">已发货
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="statu" value="需重新发货">需重新发货
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="statu" value="已重新发货">已重新发货
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="statu" value="已取消">已取消
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="company" class="col-form-label" style="font-weight: bolder;">公司:</label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company" checked="true" value="顶辰">顶辰
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company" value="灵科">灵科
+                                    </label>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="submit" value="创建" class="btn btn-primary" name="createOrder">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="js/main.min.js "></script>
+    <script src="js/perfect-scrollbar.min.js "></script>
+    <script>
+        $('#viewModal').on('show.bs.modal ', function(order) {
+
+            var button = $(order.relatedTarget) // Button that triggered the modal
+            var orderId = button.data('orderid'); // Extract info from data-* attributes
+            var orderNo = button.data('orderno'); // Extract info from data-* attributes
+            var item = button.data('item'); // Extract info from data-* attributes
+            var paytime = button.data('paytime'); // Extract info from data-* attributes
+            var receiver = button.data('receiver'); // Extract info from data-* attributes
+            var address = button.data('address'); // Extract info from data-* attributes
+            var phone = button.data('phone'); // Extract info from data-* attributes
+            var trackingNo = button.data('trackingno'); // Extract info from data-* attributes
+            var item_array = item.split(",");
+            var name = item_array[0];
+            var amount = item_array[1];
+            var information = address + ", " + receiver + ", " + phone;
+            // sessionStorage.setItem('id', id);
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We 'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-body #orderId').text(orderId)
+            modal.find('.modal-body #orderNo').text(orderNo)
+            modal.find('.modal-body #name').text(name)
+            modal.find('.modal-body #amount').text(amount)
+            modal.find('.modal-body #paytime').text(paytime)
+            modal.find('.modal-body #information').text(information)
+            modal.find('.modal-body #trackingNo').text(trackingNo)
+                // $('input[name="id"]').val(sessionStorage.getItem('id'))
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            var MaxInputs = 2; //maximum input boxes allowed  
+            var InputsWrapper = $("#tNoGroup"); //Input boxes wrapper ID  
+            var AddButton = $("#addButton"); //Add button ID  
+
+            var x = InputsWrapper.length; //initlal text box count  
+            var FieldCount = 1; //to keep track of text box added  
+
+            $(AddButton).click(function(e) //on add input button click  
+                {
+                    if (x <= MaxInputs && x > 0) //max input box allowed  
+                    {
+                        FieldCount++; //text box added increment  
+                        //add input box  
+                        $(InputsWrapper).after('<div id="tNoGroup" class="input-group"><input type="text" name="trackingNo" class="form-control" placeholder="快递单号"><span class="input-group-btn"><button class="btn btn-info" type="button" title="remove" id="removeButton">-</button></span></div>');
+                        x++; //text box increment  
+                    }
+                    return false;
+                });
+
+            $("body").on("click", "#removeButton", function(e) { //user click on remove text  
+                if (x > 1) {
+                    $(this).parent().parent('div').remove(); //获取当前元素的父元素的父元素的DIV并删除
+                    x--; //decrement textbox  
+                }
+                return false;
+            })
+        });
+    </script>
+    <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+</body>
+
+</html>

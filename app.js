@@ -1,12 +1,41 @@
 var express = require('express');
 var indexController = require('./controllers/indexController');
 var bookController = require('./controllers/bookController');
-var mongoose = require('mongoose')
+var orderController = require('./controllers/orderController');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser')
+var flash = require('connect-flash');
+var session = require('express-session');
 
 var app = express();
 
+//Express Session
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+
+//Connect flash
+app.use(flash());
+
+//Global Vars
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+});
+
+//Bodyparser
+app.use(express.urlencoded({ extended: false }));
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 indexController(app);
 bookController(app);
+orderController(app);
 mongoose.connect(
     "mongodb+srv://admin:admin@dingchencluster-ojqug.mongodb.net/test?retryWrites=true&w=majority", {
         useNewUrlParser: true,

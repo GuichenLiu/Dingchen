@@ -2,17 +2,12 @@ var mongoose = require('mongoose')
 
 var book_Schema = new mongoose.Schema({
     "_id": mongoose.Types.ObjectId,
-    "OrderId": { type: String, required: true },
-    "OrderNo": { type: String, required: true },
-    "Name": { type: String, required: true },
-    "Quantity": { type: Number, required: true },
-    "Paytime": { type: Date, required: true },
-    "Receiver": { type: String, required: true },
-    "Address": { type: String, required: true },
-    "Phone": { type: String, required: true },
-    "Price": { type: Number, required: true },
-    "Status": { type: String, required: true },
-    "TrackingNo": { type: String, required: false }
+    "书名": { type: String, required: true },
+    "公司": { type: String, required: true },
+    "菁韵价": { type: Number, required: true },
+    "书卡价": { type: Number, required: true },
+    "码洋": { type: Number, required: true },
+    "销售价": { type: Number, required: true }
 })
 
 module.exports = mongoose.model('book_collection', book_Schema);

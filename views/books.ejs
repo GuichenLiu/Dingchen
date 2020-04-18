@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>顶辰 - 图书订单管理</title>
+    <title>顶辰 - 图书管理</title>
 
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -31,8 +31,13 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="col-lg-12">
-                            <h3 style="float: left;">图书订单信息</h3>
-                            <button class="btn btn-primary btn-lg" style="float: right;" data-toggle="modal" data-target="#myModal">新建</button>
+                            <h3 style="float: left;">图书信息</h3>
+                            <form action="/books" method="POST" enctype='multipart/form-data' style="float: right">
+                                <input type="file" accept=".xls, .xlsx" name="uploadBooks">
+                                <button type="submit">上传Excel</button>
+                                <!-- <button class="btn btn-primary btn-lg" style="float: right;">批量导入</button> -->
+                            </form>
+                            <button class="btn btn-primary btn-lg" style="float: right" data-toggle="modal" data-target="#myModal">新建</button>
                         </div>
                     </div>
                 </div>
@@ -40,11 +45,13 @@
             <div class="table-responsive col-md-12 col-lg-12 mx-auto text-center">
                 <table class="table table-hover">
                     <tr>
-                        <th style="text-align:center">订单ID</th>
-                        <th style="text-align:center">订单编号</th>
+                        <th style="text-align:center">编号</th>
                         <th style="text-align:center">书名</th>
-                        <th style="text-align:center">数量</th>
-                        <th style="text-align:center">操作</th>
+                        <th style="text-align:center">公司</th>
+                        <th style="text-align:center">菁韵价</th>
+                        <th style="text-align:center">书卡价</th>
+                        <th style="text-align:center">码洋</th>
+                        <th style="text-align:center">销售价</th>
                     </tr>
                     <% for(var i = 0; i < books.length; i ++){%>
                         <tr>
@@ -52,18 +59,23 @@
                                 <%-i + 1%>
                             </td>
                             <td>
-                                <%-books[i].OrderId%>
+                                <%-books[i].书名%>
                             </td>
                             <td>
-                                <%-books[i].OrderNo%>
+                                <%-books[i].公司%>
                             </td>
                             <td>
-                                <%-books[i].Name%>
+                                <%-books[i].菁韵价%>
                             </td>
                             <td>
-                                <%-books[i].Quantity%>
+                                <%-books[i].书卡价%>
                             </td>
-                            <td><button class="btn btn-info">查看</button ><button class="btn btn-danger">删除</button ><button class="btn btn-warning">编辑</button></td>
+                            <td>
+                                <%-books[i].码洋%>
+                            </td>
+                            <td>
+                                <%-books[i].销售价%>
+                            </td>
                         </tr>
                         <%} %>
                 </table>
@@ -77,66 +89,43 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title" id="myModalLabel">
-                            新建图书订单
+                            新建图书
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <form action="/providers" method="POST">
+                        <form action="/books" method="POST">
                             <div class="form-group">
-                                <label for="orderId" class="col-form-label" style="font-weight: bolder;">订单ID:</label>
-                                <input type="text" name="orderId" id="orderId" class="form-control" placeholder="订单ID" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="orderNo" class="col-form-label" style="font-weight: bolder;">订单编号:</label>
-                                <input type="text" name="orderNo" id="orderNo" class="form-control" placeholder="订单编号" required>
+                                <label for="name" class="col-form-label" style="font-weight: bolder;">书名:</label>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="书名" required>
                             </div>
                             <div class="form-group">
-                                <label for="name" class="col-form-label" style="font-weight: bolder;">订单货品:</label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="订单货品" required>
+                                <label for="company" class="col-form-label" style="font-weight: bolder;">公司:</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company" checked="true" value="灵科">灵科
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company" value="顶辰">顶辰
+                                </label>
                             </div>
                             <div class="form-group">
-                                <label for="quantity" class="col-form-label" style="font-weight: bolder;">数量:</label>
-                                <div class="input-group spinner">
-                                    <input type="text" name="quantity" class="form-control" value="1" required>
-                                    <!-- <div class="input-group-btn-vertical"> -->
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>+</button>
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>-</button>
-                                    </span>
-                                    <!-- </div> -->
-                                </div>
+                                <label for="jPrice" class="col-form-label" style="font-weight: bolder;">菁韵价格:</label>
+                                <input type="number" name="jPrice" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="paytime" " class="col-form-label " style="font-weight: bolder; ">支付日期:</label>
-                                <input type="date " name="paytime " id="paytime " class="form-control ">
+                                <label for="cPrice" class="col-form-label" style="font-weight: bolder;">书卡价格:</label>
+                                <input type="number" name="cPrice" class="form-control">
                             </div>
-                            <div class="form-group ">
-                                <label for="receiver " class="col-form-label " style="font-weight: bolder; ">收货人:</label>
-                                <input type="text " name="receiver " id="receiver " class="form-control " placeholder="收货人 " required>
+                            <div class="form-group">
+                                <label for="fPrice" class="col-form-label" style="font-weight: bolder;">码洋:</label>
+                                <input type="number" name="fPrice" class="form-control" required>
                             </div>
-                            <div class="form-group ">
-                                <label for="address " class="col-form-label " style="font-weight: bolder; ">收货人地址:</label>
-                                <input type="text " name="address " id="address " class="form-control " placeholder="收货人地址 " required>
+                            <div class="form-group">
+                                <label for="sPrice" class="col-form-label" style="font-weight: bolder;">销售价:</label>
+                                <input type="number" name="sPrice" class="form-control" required>
                             </div>
-                            <div class="form-group ">
-                                <label for="phone " class="col-form-label " style="font-weight: bolder; ">收货人电话:</label>
-                                <input type="text " name="phone " id="phone " class="form-control " placeholder="收货人电话 ">
-                            </div>
-                            <div class="form-group ">
-                                <label for="price " class="col-form-label " style="font-weight: bolder; ">订单金额:</label>
-                                <input type="text " name="price " id="price " class="form-control " placeholder="订单金额 " required>
-                            </div>
-                            <div class="form-group ">
-                                <label for="status " class="col-form-label " style="font-weight: bolder; ">状态:</label>
-                                <input type="text " name="status " id="status " class="form-control " placeholder="状态 " required>
-                            </div>
-                            <div class="form-group ">
-                                <label for="trackingNo " class="col-form-label " style="font-weight: bolder; ">快递单号:</label>
-                                <input type="text " name="trackingNo " id="trackingNo " class="form-control " placeholder="快递单号 " >
-                            </div>
-                            <div class="modal-footer ">
-                                <button type="button " class="btn btn-secondary " data-dismiss="modal ">关闭</button>
-                                <input type="submit " value="创建 " class="btn btn-primary " name="create ">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <input type="submit" value="创建" class="btn btn-primary" name="createBook">
                             </div>
                         </form>
 
@@ -146,11 +135,12 @@
             </div>
         </div>
 
+
     </main>
 
     <script src="js/main.min.js "></script>
     <script src="js/perfect-scrollbar.min.js "></script>
-    <script>
+    <!-- <script>
         (function($) {
             $('.spinner .btn:first-of-type').on('click', function() {
                 if (parseInt($('.spinner input').val(), 10) < 9999) {
@@ -163,7 +153,7 @@
                 }
             });
         })(jQuery);
-    </script>
+    </script> -->
 </body>
 
 </html>
